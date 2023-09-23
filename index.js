@@ -171,14 +171,51 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
 
 app.get("/api/users/:_id/logs", async (req, res) => {
   const id = req.params._id
-  const {from,to, limit}=req.query
-  console.log( {from,to, limit})
+  const {from,to, limit,}=req.query
+  console.log( {from,to, limit, id})
   const fromDate=new Date(from)
   const toDate= new Date(to);
   const limitDate=Number(limit)
+  let minDate=new Date('1970-01-01Z00:00:00:000')
+  let maxDate = new Date(8640000000000000);
+  const ObjectId = mongoose.Types.ObjectId
+ const trueData= await Exercice.aggregate([
+    
+    {  $match:{
+          users:new ObjectId(id),
+           date:{
+            $gt:new Date(from&&fromDate.toString()!=="Invalid Date"&&toDate.toString()!=="Invalid Date"?from:minDate),
+            $lt:new Date(to&&fromDate.toString()!=="Invalid Date"&&toDate.toString()!=="Invalid Date"?to:maxDate)
+          } 
+      }},
+     { $group:{
+        _id:"$users",
+        username: { "$first": "$username" },
+        count: { $count: { } },
+        log:{
+          $push:{
+            date:"$date",
+            duration:"$duration",
+            description:"$description",
+          },
+          
+         
+        }
+      }},
+      { "$project": { 
+        "log": { "$slice": [ "$log", Number(limit)?limit:Math.pow(2, 10) ] },
+        "username": 1,
+        "count": 1
+    }},
+    
+  ])
+
+   const loga=trueData[0].log.map(elt=>({...elt, date:elt.date.toDateString()}))
+const result={...trueData[0], log:loga} 
+  res.json(result)
   
   
-  try {
+ /*  try {
    
     const logResults = await Log.findOne({
       id
@@ -414,7 +451,7 @@ app.get("/api/users/:_id/logs", async (req, res) => {
 
   } catch (err) {
     res.send(err)
-  }
+  } */
 
 
 })
