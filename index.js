@@ -203,7 +203,7 @@ app.get("/api/users/:_id/logs", async (req, res) => {
         }
       }},
       { "$project": { 
-        "log": { "$slice": [ "$log", Number(limit)?limit:Math.pow(2, 10) ] },
+        "log": { "$slice": [ "$log", Number(limit)?Number(limit):Math.pow(2, 10) ] },
         "username": 1,
         "count": 1
     }},
