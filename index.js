@@ -172,7 +172,6 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
 app.get("/api/users/:_id/logs", async (req, res) => {
   const id = req.params._id
   const {from,to, limit,}=req.query
-  console.log( {from,to, limit, id})
   const fromDate=new Date(from)
   const toDate= new Date(to);
   const limitDate=Number(limit)
@@ -211,8 +210,20 @@ app.get("/api/users/:_id/logs", async (req, res) => {
   ])
 
    const loga=trueData[0].log.map(elt=>({...elt, date:elt.date.toDateString()}))
-const result={...trueData[0], log:loga} 
-  res.json(result)
+   
+
+const trueResult={
+  _id: trueData[0].id,
+  username: trueData[0].username,
+  from:from&&fromDate.toString()!=="Invalid Date"?fromDate.toDateString():null,
+  to:to&&toDate.toString()!=="Invalid Date"?toDate.toDateString():null,
+  count: trueData[0].count,
+  log:loga
+}
+
+const update = Object.fromEntries(Object.entries(trueResult).filter(([, v]) => v != null));
+console.log(update)
+res.json(update)
   
   
  /*  try {
