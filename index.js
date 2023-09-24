@@ -213,7 +213,7 @@ app.get("/api/users/:_id/logs", async (req, res) => {
    
 
 const trueResult={
-  _id: trueData[0].id,
+  _id: trueData[0]._id,
   username: trueData[0].username,
   from:from&&fromDate.toString()!=="Invalid Date"?fromDate.toDateString():null,
   to:to&&toDate.toString()!=="Invalid Date"?toDate.toDateString():null,
