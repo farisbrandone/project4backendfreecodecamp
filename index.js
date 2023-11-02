@@ -219,7 +219,7 @@ const trueResult={
   username: trueData[0].username,
   from:from&&fromDate.toString()!=="Invalid Date"?fromDate.toDateString():null,
   to:to&&toDate.toString()!=="Invalid Date"?toDate.toDateString():null,
-  count:trueData[0].count,
+  count:!Number(limit)?trueData[0].count:Number(limit),
   log:loga
 }
 
