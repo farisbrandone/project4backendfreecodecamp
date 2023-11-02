@@ -172,6 +172,8 @@ app.post("/api/users/:_id/exercises", async (req, res) => {
 app.get("/api/users/:_id/logs", async (req, res) => {
   const id = req.params._id
   const {from,to, limit,}=req.query
+  console.log(req.query)
+  console.log(id)
   const fromDate=new Date(from)
   const toDate= new Date(to);
   const limitDate=Number(limit)
@@ -217,7 +219,7 @@ const trueResult={
   username: trueData[0].username,
   from:from&&fromDate.toString()!=="Invalid Date"?fromDate.toDateString():null,
   to:to&&toDate.toString()!=="Invalid Date"?toDate.toDateString():null,
-  count: trueData[0].count,
+  count:trueData[0].count,
   log:loga
 }
 
